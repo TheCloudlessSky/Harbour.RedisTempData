@@ -1,0 +1,24 @@
+﻿<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Harbour.RedisTempData</id>
+    <version>1.0.0.0</version>
+    <authors>Adrian Phinney</authors>
+    <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+    <projectUrl>http://github.com/TheCloudlessSky/Harbour.RedisTempData</projectUrl>
+    <description>An ASP.NET MVC ITempDataProvider built with Redis.</description>
+    <!--<releaseNotes>Initial release.</releaseNotes>-->
+    <copyright>Copyright Harbour Inc. 2014</copyright>
+    <tags>redis tempdata tempdataprovider mvc asp.net cache</tags>
+    <dependencies>
+      <dependency id="ServiceStack.Common" version="[3.9,4)" />
+      <dependency id="ServiceStack.Redis" version="[3.9,4)" />
+      <dependency id="ServiceStack.Text" version="[3.9,4)" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="src\Harbour.RedisTempData\bin\Release\Harbour.RedisTempData*.dll" target="lib\net40" />
+    <file src="src\Harbour.RedisTempData\bin\Release\Harbour.RedisTempData*.pdb" target="lib\net40" />
+    <file src="src\Harbour.RedisTempData\bin\Release\Harbour.RedisTempData*.xml" target="lib\net40" />
+  </files>
+</package>

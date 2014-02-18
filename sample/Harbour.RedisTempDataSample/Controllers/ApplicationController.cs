@@ -10,18 +10,19 @@ namespace Harbour.RedisTempDataSample.Controllers
 {
     public abstract class ApplicationController : Controller
     {
-        private readonly IRedisClient redis = new RedisClient("localhost:6379");
+        // If you're not using an IoC container, you can do this.
+        //private readonly IRedisClient redis = new RedisClient("localhost:6379");
 
-        protected ApplicationController()
-        {
-            TempDataProvider = new RedisTempDataProvider(redis);
-        }
+        //protected ApplicationController()
+        //{
+        //    TempDataProvider = new RedisTempDataProvider(redis);
+        //}
 
-        protected override void Dispose(bool disposing)
-        {
-            redis.Dispose();
+        //protected override void Dispose(bool disposing)
+        //{
+        //    redis.Dispose();
 
-            base.Dispose(disposing);
-        }
+        //    base.Dispose(disposing);
+        //}
     }
 }

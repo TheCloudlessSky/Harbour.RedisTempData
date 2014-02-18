@@ -87,5 +87,8 @@ return new RedisTempDataProvider(options, redisClient);
 Changelog
 ---------
 
+### v1.0.1
+- Prevent options from being modified once configured for the provider.
+
 ### v1.0.0
 - Initial release.

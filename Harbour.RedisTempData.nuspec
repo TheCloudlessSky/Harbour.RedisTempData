@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Harbour.RedisTempData</id>
-    <version>1.0.0.0</version>
+    <version>1.0.1.0</version>
     <authors>Adrian Phinney</authors>
     <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
     <projectUrl>http://github.com/TheCloudlessSky/Harbour.RedisTempData</projectUrl>

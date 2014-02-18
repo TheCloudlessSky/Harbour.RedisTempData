@@ -28,5 +28,14 @@ namespace Harbour.RedisTempData
             UserProvider = new DefaultTempDataUserProvider();
             Serializer = new DefaultTempDataSerializer();
         }
+
+        // Copy constructor.
+        internal RedisTempDataProviderOptions(RedisTempDataProviderOptions other)
+        {
+            KeyPrefix = other.KeyPrefix;
+            KeySeparator = other.KeySeparator;
+            UserProvider = other.UserProvider;
+            Serializer = other.Serializer;
+        }
     }
 }

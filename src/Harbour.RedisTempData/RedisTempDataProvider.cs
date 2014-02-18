@@ -22,7 +22,11 @@ namespace Harbour.RedisTempData
 
         public RedisTempDataProvider(RedisTempDataProviderOptions options, IRedisClient redis)
         {
-            this.options = options;
+            if (options == null) throw new ArgumentNullException("options");
+            if (redis == null) throw new ArgumentNullException("redis");
+
+            // Copy so that references can't be modified outside of thsi class.
+            this.options = new RedisTempDataProviderOptions(options);
             this.redis = redis;
         }
 

@@ -17,59 +17,72 @@ MVC has multiple ways to configure the `ITempDataProvider`:
 
 1. Instantiate **per-controller** or from a **base controller**:
 
-	```csharp
-	public abstract class ApplicationController : Controller
-	{
-	    // You should use an IRedisClientsManager to resolve the client
-	    // such as PooledRedisClientManager or BasicRedisClientManager.
-	    // The best approach would be to wire this up with IoC.
-	    private readonly IRedisClient redis = new RedisClient("localhost:6379");
-	
-	    protected ApplicationController()
-	    {
-	        TempDataProvider = new RedisTempDataProvider(redis);
-	    }
-	
-	    protected override void Dispose(bool disposing)
-	    {
-	        redis.Dispose();
-	
-	        base.Dispose(disposing);
-	    }
-	}
-	
-	public class HomeController : HomeController
-	{
-	    public ViewResult Index()
-	    {
-	        TempData["message"] = "Hello World";
-	        return View();
-	    }
-	}
-	```
+    ```csharp
+    public abstract class ApplicationController : Controller
+    {
+        // You should use an IRedisClientsManager to resolve the client
+        // such as PooledRedisClientManager or BasicRedisClientManager.
+        // The best approach would be to wire this up with IoC.
+        private readonly IRedisClient redis = new RedisClient("localhost:6379");
+    
+        protected ApplicationController()
+        {
+            TempDataProvider = new RedisTempDataProvider(redis);
+        }
+    
+        protected override void Dispose(bool disposing)
+        {
+            redis.Dispose();
+    
+            base.Dispose(disposing);
+        }
+    }
+    
+    public class HomeController : HomeController
+    {
+        public ViewResult Index()
+        {
+            TempData["message"] = "Hello World";
+            return View();
+        }
+    }
+    ```
 
-2. Use **dependency injection** with your favorite IoC/controller factory. This
-   is the preferred method. For example, with the `Ninject` and `Ninject.MVC3` packages:
+2. In MVC >= 4, use **dependency injection** with your favorite IoC/controller factory. This is the preferred method. For example, with the `Ninject` and `Ninject.MVC3` packages:
 
-	```csharp
-	private static void RegisterServices(IKernel kernel)
+    ```csharp
+    private static void RegisterServices(IKernel kernel)
     {
         // Ideally you'd use PooledClientManager in production!
         kernel.Bind<IRedisClientsManager>()
             .To<BasicRedisClientManager>()
             .InSingletonScope();
-
+    
         kernel.Bind<IRedisClient>()
             .ToMethod(ctx => ctx.Kernel.Get<IRedisClientsManager>().GetClient())
             .InRequestScope();
-
+    
         kernel.Bind<ITempDataProvider>()
             .To<RedisTempDataProvider>()
             .InRequestScope();
     }        
-	```
+    ```
+    
+    **IMPORTANT:**
 
-You can also configure the options such as serialization and how to identify
+    Because of [a bug in MVC >= 4](https://aspnetwebstack.codeplex.com/workitem/1692), you must also ensure that you override `CreateTempDataProvider` in your base controller:
+
+    ```csharp
+    protected override ITempDataProvider CreateTempDataProvider()
+    {
+        return DependencyResolver.Current.GetService<ITempDataProvider>();
+    }
+    ```
+
+Options
+-------
+
+You can configure the options such as serialization and how to identify
 the current user:
 
 ```csharp

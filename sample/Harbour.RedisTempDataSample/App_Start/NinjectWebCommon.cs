@@ -63,6 +63,9 @@ namespace Harbour.RedisTempDataSample.App_Start
                 .ToMethod(ctx => ctx.Kernel.Get<IRedisClientsManager>().GetClient())
                 .InRequestScope();
 
+            // Besure to override CreateTempDataProvider so that DependencyResolver
+            // behaves as expected. See this bug in MVC:
+            // https://aspnetwebstack.codeplex.com/workitem/1692
             kernel.Bind<ITempDataProvider>()
                 .ToMethod(ctx =>
                 {

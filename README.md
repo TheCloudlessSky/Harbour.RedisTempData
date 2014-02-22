@@ -38,7 +38,7 @@ MVC has multiple ways to configure the `ITempDataProvider`:
         }
     }
     
-    public class HomeController : HomeController
+    public class HomeController : ApplicationController
     {
         public ViewResult Index()
         {

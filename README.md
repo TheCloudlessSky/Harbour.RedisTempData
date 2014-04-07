@@ -20,7 +20,8 @@ MVC has multiple ways to configure the `ITempDataProvider`:
     ```csharp
     public abstract class ApplicationController : Controller
     {
-        private static readonly ConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect("localhost");
+        private static readonly ConnectionMultiplexer multiplexer =
+            ConnectionMultiplexer.Connect("localhost");
         
         private readonly IDatabase redis = multiplexer.GetDatabase(0);
 

@@ -26,7 +26,7 @@ namespace Harbour.RedisTempData
             KeyPrefix = "TempData";
             KeySeparator = ":";
             UserProvider = new DefaultTempDataUserProvider();
-            Serializer = new DefaultTempDataSerializer();
+            Serializer = new XmlObjectSerializerTempDataSerializer();
         }
 
         // Copy constructor.

@@ -4,28 +4,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using ServiceStack.Redis;
-using ServiceStack.Text;
+using StackExchange.Redis;
 
 namespace Harbour.RedisTempData
 {
     public class RedisTempDataProvider : ITempDataProvider
     {
         private readonly RedisTempDataProviderOptions options;
-        private readonly IRedisClient redis;
+        private readonly IDatabase redis;
 
-        public RedisTempDataProvider(IRedisClient redis)
-            : this(new RedisTempDataProviderOptions(), redis)
+        public RedisTempDataProvider(IDatabase database)
+            : this(new RedisTempDataProviderOptions(), database)
         {
 
         }
 
-        public RedisTempDataProvider(RedisTempDataProviderOptions options, IRedisClient redis)
+        public RedisTempDataProvider(RedisTempDataProviderOptions options, IDatabase redis)
         {
             if (options == null) throw new ArgumentNullException("options");
             if (redis == null) throw new ArgumentNullException("redis");
 
-            // Copy so that references can't be modified outside of thsi class.
+            // Copy so that references can't be modified outside of this class.
             this.options = new RedisTempDataProviderOptions(options);
             this.redis = redis;
         }
@@ -41,26 +40,20 @@ namespace Harbour.RedisTempData
             var hashKey = GetKey(controllerContext);
             var result = new Dictionary<string, object>();
 
-            using (var transaction = redis.CreateTransaction())
+            var transaction = redis.CreateTransaction();
+            var getResult = transaction.HashGetAllAsync(hashKey).ContinueWith(task =>
             {
-                // HACK: ServiceStack.Redis doesn't support dictionaries inside
-                // of a transaction. Therefore, we use the native client and
-                // do the conversion ourselves.
-                transaction.QueueCommand(r => ((IRedisNativeClient)r).HGetAll(hashKey), multiDataList =>
+                foreach (var kvp in task.Result)
                 {
-                    for (var i = 0; i < multiDataList.Length; i += 2)
-                    {
-                        var key = multiDataList[i].FromUtf8Bytes();
-                        var value = multiDataList[i + 1].FromUtf8Bytes();
-                        result[key] = Deserialize(value);
-                    }
-                });
+                    result[kvp.Name] = Deserialize(kvp.Value);
+                }
+            });
 
-                // Remove *after* reading the items since we're done with them.
-                transaction.QueueCommand(r => r.Remove(hashKey));
+            // Remove *after* reading the items since we're done with them.
+            transaction.KeyDeleteAsync(hashKey, CommandFlags.FireAndForget);
 
-                transaction.Commit();
-            }
+            transaction.Execute();
+            transaction.Wait(getResult);
 
             return result;
         }
@@ -69,33 +62,31 @@ namespace Harbour.RedisTempData
         {
             var hashKey = GetKey(controllerContext);
 
-            using (var transaction = redis.CreateTransaction())
+            var transaction = redis.CreateTransaction();
+
+            // Clear the hash since we don't want old items.
+            transaction.KeyDeleteAsync(hashKey, CommandFlags.FireAndForget);
+
+            if (values != null && values.Count > 0)
             {
-                var hash = redis.Hashes[hashKey];
-
-                // Clear the hash since we don't want old items.
-                transaction.QueueCommand(r => r.Remove(hashKey));
-
-                if (values != null && values.Count > 0)
+                foreach (var kvp in values)
                 {
-                    foreach (var kvp in values)
-                    {
-                        transaction.QueueCommand(r => hash.Add(kvp.Key, Serialize(kvp.Value)));
-                    }
+                    var serialized = Serialize(kvp.Value);
+                    transaction.HashSetAsync(hashKey, kvp.Key, serialized, flags: CommandFlags.FireAndForget);
                 }
-
-                transaction.Commit();
             }
+
+            transaction.Execute();
         }
 
-        private object Deserialize(string value)
+        private object Deserialize(RedisValue value)
         {
-            if (value == null) return null;
+            if (value.IsNull) return null;
 
             return options.Serializer.Deserialize(value);
         }
 
-        private string Serialize(object value)
+        private RedisValue Serialize(object value)
         {
             return options.Serializer.Serialize(value);
         }

@@ -11,9 +11,7 @@
     <copyright>Copyright Harbour Inc. 2014</copyright>
     <tags>redis tempdata tempdataprovider mvc asp.net cache</tags>
     <dependencies>
-      <dependency id="ServiceStack.Common" version="[3.9,4)" />
-      <dependency id="ServiceStack.Redis" version="[3.9,4)" />
-      <dependency id="ServiceStack.Text" version="[3.9,4)" />
+      <dependency id="StackExchange.Redis" version="1.0.241" />
     </dependencies>
   </metadata>
   <files>

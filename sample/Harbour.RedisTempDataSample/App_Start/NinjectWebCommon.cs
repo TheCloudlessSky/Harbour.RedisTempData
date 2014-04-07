@@ -10,8 +10,8 @@ namespace Harbour.RedisTempDataSample.App_Start
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
     using Ninject;
     using Ninject.Web.Common;
-    using ServiceStack.Redis;
-
+    using StackExchange.Redis;
+    
     public static class NinjectWebCommon 
     {
         private static readonly Bootstrapper bootstrapper = new Bootstrapper();
@@ -54,17 +54,16 @@ namespace Harbour.RedisTempDataSample.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-            // Ideally you'd use PooledClientManager in production!
-            kernel.Bind<IRedisClientsManager>()
-                .To<BasicRedisClientManager>()
+            kernel.Bind<ConnectionMultiplexer>()
+                .ToMethod(ctx => ConnectionMultiplexer.Connect("localhost"))
                 .InSingletonScope();
 
-            kernel.Bind<IRedisClient>()
-                .ToMethod(ctx => ctx.Kernel.Get<IRedisClientsManager>().GetClient())
+            kernel.Bind<IDatabase>()
+                .ToMethod(ctx => ctx.Kernel.Get<ConnectionMultiplexer>().GetDatabase(0))
                 .InRequestScope();
 
             // Besure to override CreateTempDataProvider so that DependencyResolver
-            // behaves as expected. See this bug in MVC:
+            // behaves as expected. See this bug in MVC >= 4:
             // https://aspnetwebstack.codeplex.com/workitem/1692
             kernel.Bind<ITempDataProvider>()
                 .ToMethod(ctx =>
@@ -77,7 +76,7 @@ namespace Harbour.RedisTempDataSample.App_Start
                         // UserProvider = new CustomUserProvider()
                     };
 
-                    return new RedisTempDataProvider(options, ctx.Kernel.Get<IRedisClient>());
+                    return new RedisTempDataProvider(options, ctx.Kernel.Get<IDatabase>());
                 })
                 .InRequestScope();
         }        

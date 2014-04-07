@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Xunit;
 using Should;
+using StackExchange.Redis;
 
 namespace Harbour.RedisTempData.Test
 {
@@ -14,7 +15,7 @@ namespace Harbour.RedisTempData.Test
         private const string prefix = "TempData";
         private const string separator = ":";
         private const string user = "john.doe";
-        private static readonly string key = prefix + separator + user;
+        private static readonly RedisKey key = prefix + separator + user;
         private static readonly RedisTempDataProviderOptions options;
         private static readonly ControllerContext context;
 
@@ -25,7 +26,7 @@ namespace Harbour.RedisTempData.Test
                 KeyPrefix = prefix,
                 KeySeparator = separator,
                 UserProvider = new FakeTempDataUserProvider(user),
-                Serializer = new FakeTempDataSerializer()
+                Serializer = new XmlObjectSerializerTempDataSerializer()
             };
 
             context = new ControllerContext();
@@ -37,18 +38,19 @@ namespace Harbour.RedisTempData.Test
             void deletes_the_old_value()
             {
                 var sut = new RedisTempDataProvider(options, Redis);
-                Redis.Set(key, "old-value");
+                Redis.StringSet(key, "old-value");
 
                 sut.SaveTempData(context, new Dictionary<string, object>());
 
-                var result = Redis.Get<string>(key);
-                result.ShouldBeNull();
+                var result = Redis.StringGet(key);
+                result.ShouldEqual(RedisValue.Null);
             }
 
             [Fact]
             void adds_each_serialized_item_to_the_hash()
             {
                 var sut = new RedisTempDataProvider(options, Redis);
+                Redis.KeyDelete(key);
 
                 sut.SaveTempData(context, new Dictionary<string, object>()
                 {
@@ -57,9 +59,9 @@ namespace Harbour.RedisTempData.Test
                     { "C", new FakeItem() { Name = "Three" } }
                 });
 
-                Redis.Hashes[key]["A"].ShouldEqual("1");
-                Redis.Hashes[key]["B"].ShouldEqual("\"2\"");
-                Redis.Hashes[key]["C"].ShouldEqual("{\"__type\":\"Harbour.RedisTempData.Test.FakeItem, Harbour.RedisTempData.Test\",\"Name\":\"Three\"}");
+                Redis.HashGet(key, "A").ShouldEqual((RedisValue)options.Serializer.Serialize(1));
+                Redis.HashGet(key, "B").ShouldEqual((RedisValue)options.Serializer.Serialize("2"));
+                Redis.HashGet(key, "C").ShouldEqual((RedisValue)options.Serializer.Serialize(new FakeItem() { Name = "Three" }));
             }
         }
 
@@ -69,18 +71,21 @@ namespace Harbour.RedisTempData.Test
             void deletes_the_old_value()
             {
                 var sut = new RedisTempDataProvider(options, Redis);
-                Redis.Hashes[key].Add("old", "value");
+                Redis.KeyDelete(key);
+                Redis.HashSet(key, "old", options.Serializer.Serialize("value"));
 
                 var tempData = sut.LoadTempData(context);
 
-                Redis.Hashes[key].ShouldBeEmpty();
+                string result = Redis.StringGet(key);
+                result.ShouldBeNull();
             }
 
             [Fact]
             void gets_each_item_deserialized()
             {
                 var sut = new RedisTempDataProvider(options, Redis);
-                
+                Redis.KeyDelete(key);
+
                 sut.SaveTempData(context, new Dictionary<string, object>()
                 {
                     { "A", "1" },

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using ServiceStack.Text;
 
 namespace Harbour.RedisTempDataSample.Controllers
 {
@@ -31,14 +30,14 @@ namespace Harbour.RedisTempDataSample.Controllers
             TempData["c"] = new Person(24, "John Doe");
 
             var model = TempData.ToList();
-            return Content(model.ToJson());
+            return Json(model, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
         public ActionResult Get()
         {
             var model = TempData.Select(kvp => new { Key = kvp.Key, Type = kvp.Value.GetType(), Value = kvp.Value }).ToList();
-            return Content(model.ToJson());
+            return Json(model, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Index()

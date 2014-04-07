@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ServiceStack.Redis;
+using StackExchange.Redis;
 
 namespace Harbour.RedisTempData.Test
 {
@@ -10,28 +10,30 @@ namespace Harbour.RedisTempData.Test
     {
         // Use a different DB than development.
         private const int testDb = 15;
-        private readonly string testHost = "127.0.0.1:6379";
+        private readonly string testHost = "localhost";
 
-        public IRedisClientsManager ClientManager { get; private set; }
-        public IRedisClient Redis { get; private set; }
+        public ConnectionMultiplexer Multiplexer { get; private set; }
+        public IDatabase Redis { get; private set; }
 
         protected RedisTest()
         {
-            ClientManager = new BasicRedisClientManager(testDb, testHost);
-            Redis = GetRedisClient();
-}
+            var config = new ConfigurationOptions() { AllowAdmin = true };
+            config.EndPoints.Add(testHost);
+            Multiplexer = ConnectionMultiplexer.Connect(config);
+            Redis = GetRedis();
+        }
 
-        protected virtual IRedisClient GetRedisClient()
+        protected virtual IDatabase GetRedis()
         {
-            var client = ClientManager.GetClient();
-            client.FlushDb();
+            var client = Multiplexer.GetDatabase(testDb);
+            var server = Multiplexer.GetServer(testHost);
+            server.FlushDatabase(testDb);
             return client;
         }
 
         public virtual void Dispose()
         {
-            Redis.Dispose();
-            ClientManager.Dispose();
+            Multiplexer.Dispose();
         }
     }
 }

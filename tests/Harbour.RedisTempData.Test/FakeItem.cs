@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace Harbour.RedisTempData.Test
 {
+    [DataContract]
     public class FakeItem : IEquatable<FakeItem>
     {
+        [DataMember]
         public string Name { get; set; }
 
         public override int GetHashCode()

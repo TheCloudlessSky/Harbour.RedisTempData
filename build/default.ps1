@@ -1,4 +1,3 @@
-
 properties {
   $configuration = "Release"
   $version = ""
@@ -8,15 +7,15 @@ properties {
   $binRoot = "bin"
 
   # Source
-  $srcRoot = "src\Harbour.RedisTempData"
+  $srcRoot = "..\src\Harbour.RedisTempData"
   $srcProject = resolve-path "$srcRoot\*.csproj"
   
   # Tests
-  $testsRoot = "tests\Harbour.RedisTempData.Test"
+  $testsRoot = "..\tests\Harbour.RedisTempData.Test"
   $testProject = resolve-path "$testsRoot\*.csproj"
 
-  $nuget = resolve-path ".nuget\nuget.exe"
-  $xunit = resolve-path "packages\xunit.runners.*\tools\xunit.console.clr4.exe"
+  $nuget = resolve-path "..\.nuget\nuget.exe"
+  $xunit = resolve-path "..\packages\xunit.runners.*\tools\xunit.console.clr4.exe"
 }
 
 task default -depends build-package

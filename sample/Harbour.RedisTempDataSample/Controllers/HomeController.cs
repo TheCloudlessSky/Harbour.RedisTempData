@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Web;
 using System.Web.Mvc;
+using Newtonsoft.Json;
 
 namespace Harbour.RedisTempDataSample.Controllers
 {
@@ -10,7 +12,10 @@ namespace Harbour.RedisTempDataSample.Controllers
     {
         public class Person
         {
+            [DataMember]
             public int Age { get; set; }
+
+            [DataMember]
             public string Name { get; set; }
 
             public Person(int age, string name)
@@ -30,14 +35,17 @@ namespace Harbour.RedisTempDataSample.Controllers
             TempData["c"] = new Person(24, "John Doe");
 
             var model = TempData.ToList();
-            return Json(model, JsonRequestBehavior.AllowGet);
+
+            var data = JsonConvert.SerializeObject(model);
+            return Content(data, "application/json");
         }
 
         [HttpGet]
         public ActionResult Get()
         {
             var model = TempData.Select(kvp => new { Key = kvp.Key, Type = kvp.Value.GetType(), Value = kvp.Value }).ToList();
-            return Json(model, JsonRequestBehavior.AllowGet);
+            var data = JsonConvert.SerializeObject(model);
+            return Content(data, "application/json");
         }
 
         public ActionResult Index()

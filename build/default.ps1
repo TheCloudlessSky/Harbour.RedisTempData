@@ -9,6 +9,8 @@ properties {
   # Source
   $srcRoot = "..\src\Harbour.RedisTempData"
   $srcProject = resolve-path "$srcRoot\*.csproj"
+  $srcRootNet40 = "..\src\Harbour.RedisTempData.Net40"
+  $srcProjectNet40 = resolve-path "$srcRootNet40\*.csproj"
   
   # Tests
   $testsRoot = "..\tests\Harbour.RedisTempData.Test"
@@ -30,6 +32,7 @@ task build -depends clean {
 
   exec {
     msbuild "$srcProject" /t:"Clean;Build" /p:Configuration="$configuration"
+    msbuild "$srcProjectNet40" /t:"Clean;Build" /p:Configuration="$configuration"
   }
 
 }

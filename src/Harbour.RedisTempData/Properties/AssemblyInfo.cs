@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCompany("http://github.com/TheCloudlessSky/Harbour.RedisTempData")]
 [assembly: AssemblyProduct("Harbour.RedisTempData")]
 [assembly: AssemblyCopyright("Copyright © Harbour Inc. 2014")]
-[assembly: AssemblyDescription("An ASP.NET MVC ITempDataProvider built with Redis.")]
+[assembly: AssemblyDescription("An ASP.NET MVC ITempDataProvider for Redis.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]

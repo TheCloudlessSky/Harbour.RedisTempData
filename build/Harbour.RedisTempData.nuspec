@@ -6,17 +6,21 @@
     <authors>Adrian Phinney</authors>
     <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
     <projectUrl>http://github.com/TheCloudlessSky/Harbour.RedisTempData</projectUrl>
-    <description>An ASP.NET MVC ITempDataProvider built with Redis.</description>
+    <description>An ASP.NET MVC ITempDataProvider for Redis.</description>
     <!--<releaseNotes>Initial release.</releaseNotes>-->
     <copyright>Copyright Harbour Inc. 2014</copyright>
     <tags>redis tempdata tempdataprovider mvc asp.net cache</tags>
     <dependencies>
-      <dependency id="StackExchange.Redis" version="1.0.241" />
+      <dependency id="StackExchange.Redis" version="1.0.270" />
     </dependencies>
   </metadata>
   <files>
     <file src="..\src\Harbour.RedisTempData\bin\Release\Harbour.RedisTempData*.dll" target="lib\net45" />
     <file src="..\src\Harbour.RedisTempData\bin\Release\Harbour.RedisTempData*.pdb" target="lib\net45" />
     <file src="..\src\Harbour.RedisTempData\bin\Release\Harbour.RedisTempData*.xml" target="lib\net45" />
+    
+    <file src="..\src\Harbour.RedisTempData.Net40\bin\Release\Harbour.RedisTempData*.dll" target="lib\net40" />
+    <file src="..\src\Harbour.RedisTempData.Net40\bin\Release\Harbour.RedisTempData*.pdb" target="lib\net40" />
+    <file src="..\src\Harbour.RedisTempData.Net40\bin\Release\Harbour.RedisTempData*.xml" target="lib\net40" />
   </files>
 </package>

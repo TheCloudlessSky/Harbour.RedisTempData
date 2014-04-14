@@ -8,6 +8,9 @@ using StackExchange.Redis;
 
 namespace Harbour.RedisTempData
 {
+    /// <summary>
+    /// An <see cref="ITempDataProvider"/> for Redis.
+    /// </summary>
     public class RedisTempDataProvider : ITempDataProvider
     {
         private readonly RedisTempDataProviderOptions options;

@@ -9,6 +9,9 @@ using System.Web.SessionState;
 
 namespace Harbour.RedisTempData
 {
+    /// <summary>
+    /// Provides a default mechanism for identifying the current user.
+    /// </summary>
     public class DefaultTempDataUserProvider : ITempDataUserProvider
     {
         private const string defaultCookieName = "aid";

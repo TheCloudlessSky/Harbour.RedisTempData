@@ -8,7 +8,16 @@ namespace Harbour.RedisTempData
 {
     public class RedisTempDataProviderOptions
     {
+        /// <summary>
+        /// Gets or sets the prefix used for keys in Redis. The default value
+        /// is &quot;TempData&quot;.
+        /// </summary>
         public string KeyPrefix { get; set; }
+
+        /// <summary>
+        /// Gets or sets the separator used for keys in Redis. The default
+        /// value is &quot;:&quot;.
+        /// </summary>
         public string KeySeparator { get; set; }
 
         /// <summary>

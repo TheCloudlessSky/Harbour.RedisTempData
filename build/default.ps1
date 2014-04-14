@@ -4,7 +4,7 @@ properties {
   $nugetApiKey = ""
 
   # Package Output
-  $binRoot = "bin"
+  $binRoot = "..\bin"
 
   # Source
   $srcRoot = "..\src\Harbour.RedisTempData"

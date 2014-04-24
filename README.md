@@ -105,7 +105,6 @@ Changelog
 
 ### v2.0.0
 - Switch the Redis library to [StackExchange.Redis](https://github.com/StackExchange/StackExchange.Redis). 
-- Require at least .NET 4.5 because of StackExchange.Redis.
 - Change default serializer to `XmlObjectSerializerTempDataSerializer`. You can very
   easily implement your own serializer by implementing `ITempDataSerializer`.
 

@@ -15,12 +15,11 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\src\Harbour.RedisTempData\bin\Release\Harbour.RedisTempData*.dll" target="lib\net45" />
-    <file src="..\src\Harbour.RedisTempData\bin\Release\Harbour.RedisTempData*.pdb" target="lib\net45" />
-    <file src="..\src\Harbour.RedisTempData\bin\Release\Harbour.RedisTempData*.xml" target="lib\net45" />
-    
-    <file src="..\src\Harbour.RedisTempData.Net40\bin\Release\Harbour.RedisTempData*.dll" target="lib\net40" />
-    <file src="..\src\Harbour.RedisTempData.Net40\bin\Release\Harbour.RedisTempData*.pdb" target="lib\net40" />
-    <file src="..\src\Harbour.RedisTempData.Net40\bin\Release\Harbour.RedisTempData*.xml" target="lib\net40" />
+    <file src="src\Harbour.RedisTempData.Net40\bin\Release\Harbour.RedisTempData.dll" target="lib\net40" />
+    <file src="src\Harbour.RedisTempData.Net40\bin\Release\Harbour.RedisTempData.pdb" target="lib\net40" />
+    <file src="src\Harbour.RedisTempData.Net40\bin\Release\Harbour.RedisTempData.xml" target="lib\net40" />
+    <file src="src\Harbour.RedisTempData\bin\Release\Harbour.RedisTempData.xml" target="lib\net45" />
+    <file src="src\Harbour.RedisTempData\bin\Release\Harbour.RedisTempData.dll" target="lib\net45" />
+    <file src="src\Harbour.RedisTempData\bin\Release\Harbour.RedisTempData.pdb" target="lib\net45" />
   </files>
 </package>

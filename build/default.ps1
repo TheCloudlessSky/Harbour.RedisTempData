@@ -46,7 +46,7 @@ task build-package -depends build, test {
 
 }
 
-task deploy-package -depends build-package {
+task publish-package -depends build-package {
 
   exec {
     $nugetPackage = resolve-path "$binRoot\*.nupkg"

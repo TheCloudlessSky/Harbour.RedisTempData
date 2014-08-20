@@ -26,7 +26,7 @@ namespace Harbour.RedisTempData.Test
                 KeyPrefix = prefix,
                 KeySeparator = separator,
                 UserProvider = new FakeTempDataUserProvider(user),
-                Serializer = new XmlObjectSerializerTempDataSerializer()
+                Serializer = new NetDataContractTempDataSerializer()
             };
 
             context = new ControllerContext();

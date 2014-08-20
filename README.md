@@ -105,7 +105,7 @@ Changelog
 
 ### v2.0.0
 - Switch the Redis library to [StackExchange.Redis](https://github.com/StackExchange/StackExchange.Redis). 
-- Change default serializer to `XmlObjectSerializerTempDataSerializer`. You can very
+- Change default serializer to `NetDataContractTempDataSerializer`. You can very
   easily implement your own serializer by implementing `ITempDataSerializer`.
 
 ### v1.0.1

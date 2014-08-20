@@ -11,13 +11,8 @@ using StackExchange.Redis;
 
 namespace Harbour.RedisTempData
 {
-    public class XmlObjectSerializerTempDataSerializer : ITempDataSerializer
+    public abstract class XmlTempDataSerializerBase : ITempDataSerializer
     {
-        public XmlObjectSerializerTempDataSerializer()
-        {
-
-        }
-
         public RedisValue Serialize(object value)
         {
             var serializer = CreateSerializer();
@@ -46,10 +41,6 @@ namespace Harbour.RedisTempData
             }
         }
 
-        protected virtual XmlObjectSerializer CreateSerializer()
-        {
-            var serializer = new NetDataContractSerializer();
-            return serializer;
-        }
+        protected abstract XmlObjectSerializer CreateSerializer();
     }
 }

@@ -76,6 +76,9 @@
     <Compile Include="..\Harbour.RedisTempData\ITempDataUserProvider.cs">
       <Link>ITempDataUserProvider.cs</Link>
     </Compile>
+    <Compile Include="..\Harbour.RedisTempData\NetDataContractTempDataSerializer.cs">
+      <Link>NetDataContractTempDataSerializer.cs</Link>
+    </Compile>
     <Compile Include="..\Harbour.RedisTempData\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
@@ -85,8 +88,8 @@
     <Compile Include="..\Harbour.RedisTempData\RedisTempDataProviderOptions.cs">
       <Link>RedisTempDataProviderOptions.cs</Link>
     </Compile>
-    <Compile Include="..\Harbour.RedisTempData\XmlObjectSerializerTempDataSerializer.cs">
-      <Link>XmlObjectSerializerTempDataSerializer.cs</Link>
+    <Compile Include="..\Harbour.RedisTempData\XmlTempDataSerializerBase.cs">
+      <Link>XmlTempDataSerializerBase.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>

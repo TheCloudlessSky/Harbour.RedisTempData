@@ -91,7 +91,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="XmlObjectSerializerTempDataSerializerTests.cs" />
+    <Compile Include="NetDataContractTempDataSerializerTests.cs" />
     <Compile Include="DefaultTempDataUserProviderTests.cs" />
     <Compile Include="FakeItem.cs" />
     <Compile Include="FakeTempDataUserProvider.cs" />

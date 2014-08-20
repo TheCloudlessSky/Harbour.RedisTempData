@@ -79,7 +79,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="XmlObjectSerializerTempDataSerializer.cs" />
+    <Compile Include="NetDataContractTempDataSerializer.cs" />
+    <Compile Include="XmlTempDataSerializerBase.cs" />
     <Compile Include="DefaultTempDataUserProvider.cs" />
     <Compile Include="ITempDataSerializer.cs" />
     <Compile Include="ITempDataUserProvider.cs" />

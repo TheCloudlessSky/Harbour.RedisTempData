@@ -103,6 +103,11 @@ return new RedisTempDataProvider(options, redisClient);
 Changelog
 ---------
 
+### v2.1.1
+- Only fall back to the `SessionID` if it's changed since a new `SessionID` is
+  generated until the session is used (meaning the TempData would always be
+  new).  
+
 ### v2.1.0
 - Fall back to identifying an anonymous user to the request's `AnonymousID` if
   you're using the `AnonymousIdentificationModule`.

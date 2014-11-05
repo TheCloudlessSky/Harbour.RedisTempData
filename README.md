@@ -103,6 +103,10 @@ return new RedisTempDataProvider(options, redisClient);
 Changelog
 ---------
 
+### v2.1.0
+- Fall back to identifying an anonymous user to the request's `AnonymousID` if
+  you're using the `AnonymousIdentificationModule`.
+
 ### v2.0.0
 - Switch the Redis library to [StackExchange.Redis](https://github.com/StackExchange/StackExchange.Redis). 
 - Change default serializer to `NetDataContractTempDataSerializer`. You can very

@@ -55,14 +55,7 @@ namespace Harbour.RedisTempData
 
             string user;
 
-            // Fallback to the current session ID. However, if you're going 
-            // this route, you should probably be using the default
-            // SessionStateTempDataProvider in MVC :).
-            if (httpContext.Session != null)
-            {
-                user = httpContext.Session.SessionID;
-            }
-            else if (httpContext.Request.IsAuthenticated)
+            if (httpContext.Request.IsAuthenticated)
             {
                 // The user has gone from being an anonymous user to an 
                 // authenticated user.
@@ -92,6 +85,14 @@ namespace Harbour.RedisTempData
             else if (httpContext.Request.AnonymousID != null)
             {
                 user = httpContext.Request.AnonymousID;
+            }
+            // Fallback to the current session ID only when it hasn't changed
+            // since new sessions are generated until the session is actually
+            // *used*. However, if you're going this route, you should probably
+            // be using the default SessionStateTempDataProvider in MVC :).
+            else if (httpContext.Session != null && !httpContext.Session.IsNewSession)
+            {
+                user = httpContext.Session.SessionID;
             }
             else if (!IsValidCookie(fallbackCookie))
             {

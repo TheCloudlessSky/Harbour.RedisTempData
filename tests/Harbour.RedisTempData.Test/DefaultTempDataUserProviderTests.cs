@@ -34,9 +34,10 @@ namespace Harbour.RedisTempData.Test
         }
 
         [Fact]
-        void uses_the_current_session_id_if_the_session_is_available()
+        void uses_the_current_session_id_if_the_session_is_available_and_is_not_new()
         {
             httpContext.Setup(ctx => ctx.Session.SessionID).Returns("session12345");
+            httpContext.Setup(ctx => ctx.Session.IsNewSession).Returns(false);
             var sut = new DefaultTempDataUserProvider(cookieName, sessionIdManager.Object);
 
             var result = sut.GetUser(context);

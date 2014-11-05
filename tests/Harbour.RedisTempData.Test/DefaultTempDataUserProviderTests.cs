@@ -45,6 +45,17 @@ namespace Harbour.RedisTempData.Test
         }
 
         [Fact]
+        void uses_the_request_anonymous_id_module_value_if_it_is_available()
+        {
+            httpContext.Setup(ctx => ctx.Request.AnonymousID).Returns("anon12345");
+            var sut = new DefaultTempDataUserProvider(cookieName, sessionIdManager.Object);
+
+            var result = sut.GetUser(context);
+
+            result.ShouldEqual("anon12345");
+        }
+
+        [Fact]
         void when_the_user_is_not_authenticated_and_no_cookie_exists_it_issues_and_uses_a_new_cookie()
         {
             SetupSessionIds("a-1", "b-2", "c-3");
@@ -81,7 +92,19 @@ namespace Harbour.RedisTempData.Test
         }
 
         [Fact]
-        void when_the_user_was_previously_anonymous_and_is_now_authenticated_it_uses_and_deletes_the_old_cookie()
+        void when_the_user_was_previously_anonymous_with_anonymous_id_module_and_is_now_authenticated_it_uses_the_anonymous_id()
+        {
+            var sut = new DefaultTempDataUserProvider(cookieName, sessionIdManager.Object);
+            httpContext.Setup(x => x.Request.AnonymousID).Returns("anon12345");
+            UseAuthenticatedUser("current-user");
+
+            var result = sut.GetUser(context);
+
+            result.ShouldEqual("anon12345");
+        }
+
+        [Fact]
+        void when_the_user_was_previously_anonymous_with_custom_cookie_and_is_now_authenticated_it_uses_and_deletes_the_old_cookie()
         {
             var sut = new DefaultTempDataUserProvider(cookieName, sessionIdManager.Object);
             AddCookie(requestCookies, "cookie-value");

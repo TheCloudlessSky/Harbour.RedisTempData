@@ -51,7 +51,7 @@ namespace Harbour.RedisTempData
                 return (string)httpContext.Items[cachedHttpContextKey];
             }
 
-            var cookie = request.Cookies[fallbackCookieName];
+            var fallbackCookie = request.Cookies[fallbackCookieName];
 
             string user;
 
@@ -66,13 +66,17 @@ namespace Harbour.RedisTempData
             {
                 // The user has gone from being an anonymous user to an 
                 // authenticated user.
-                if (IsValidCookie(cookie))
+                if (httpContext.Request.AnonymousID != null)
+                {
+                    user = httpContext.Request.AnonymousID;
+                }
+                else if (IsValidCookie(fallbackCookie))
                 {
                     // Even though we're authenticated, the anonymous ID is
                     // used for this request because we want to grab the temp
                     // data from the previous request (when the user was 
                     // unauthenticated).
-                    user = cookie.Value;
+                    user = fallbackCookie.Value;
 
                     // Expire the cookie since don't need the cookie anymore.
                     response.Cookies.Add(new HttpCookie(fallbackCookieName)
@@ -85,7 +89,11 @@ namespace Harbour.RedisTempData
                     user = httpContext.User.Identity.Name;
                 }
             }
-            else if (!IsValidCookie(cookie))
+            else if (httpContext.Request.AnonymousID != null)
+            {
+                user = httpContext.Request.AnonymousID;
+            }
+            else if (!IsValidCookie(fallbackCookie))
             {
                 // The session ID manager is used to generate a secure ID that
                 // is valid for a cookie (no reason to reinvent the wheel!).
@@ -99,7 +107,7 @@ namespace Harbour.RedisTempData
             }
             else
             {
-                user = cookie.Value;
+                user = fallbackCookie.Value;
             }
 
             httpContext.Items[cachedHttpContextKey] = user;

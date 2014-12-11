@@ -96,6 +96,7 @@
     <Compile Include="FakeItem.cs" />
     <Compile Include="FakeTempDataUserProvider.cs" />
     <Compile Include="MockExtensions.cs" />
+    <Compile Include="PerformanceTests.cs" />
     <Compile Include="RedisTempDataProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RedisTest.cs" />

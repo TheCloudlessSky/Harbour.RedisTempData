@@ -44,19 +44,17 @@ namespace Harbour.RedisTempData
             var result = new Dictionary<string, object>();
 
             var transaction = redis.CreateTransaction();
-            var getResult = transaction.HashGetAllAsync(hashKey).ContinueWith(task =>
-            {
-                foreach (var kvp in task.Result)
-                {
-                    result[kvp.Name] = Deserialize(kvp.Value);
-                }
-            });
+            var getAllTask = transaction.HashGetAllAsync(hashKey);
 
             // Remove *after* reading the items since we're done with them.
             transaction.KeyDeleteAsync(hashKey, CommandFlags.FireAndForget);
 
             transaction.Execute();
-            transaction.Wait(getResult);
+            
+            foreach (var kvp in transaction.Wait(getAllTask))
+            {
+                result[kvp.Name] = Deserialize(kvp.Value);
+            }
 
             return result;
         }
@@ -79,7 +77,7 @@ namespace Harbour.RedisTempData
                 }
             }
 
-            transaction.Execute();
+            transaction.Execute(CommandFlags.FireAndForget);
         }
 
         private object Deserialize(RedisValue value)

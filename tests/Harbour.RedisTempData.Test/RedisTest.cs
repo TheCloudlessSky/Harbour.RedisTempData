@@ -21,15 +21,20 @@ namespace Harbour.RedisTempData.Test
             var config = new ConfigurationOptions() { AllowAdmin = true };
             config.EndPoints.Add(testHost, testPort);
             Multiplexer = ConnectionMultiplexer.Connect(config);
-            Redis = GetRedis();
+            Redis = GetFlushedRedis();
         }
 
-        protected virtual IDatabase GetRedis()
+        private IDatabase GetFlushedRedis()
         {
-            var client = Multiplexer.GetDatabase(testDb);
+            var redis = GetDatabase();
             var server = Multiplexer.GetServer(testHost + ":" + testPort);
             server.FlushDatabase(testDb);
-            return client;
+            return redis;
+        }
+
+        protected IDatabase GetDatabase()
+        {
+            return Multiplexer.GetDatabase(testDb);
         }
 
         public virtual void Dispose()

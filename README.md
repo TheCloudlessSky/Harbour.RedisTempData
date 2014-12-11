@@ -103,6 +103,11 @@ return new RedisTempDataProvider(options, redisClient);
 Changelog
 ---------
 
+### v2.1.2
+- Fix performance issue where loading was waiting on the continuation to 
+  deserialize. Instead, we want to wait only on getting the result from Redis.
+  
+
 ### v2.1.1
 - Only fall back to the `SessionID` if it's changed since a new `SessionID` is
   generated until the session is used (meaning the TempData would always be

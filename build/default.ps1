@@ -1,6 +1,4 @@
 properties {
-  $nugetApiKey = ""
-
   $binRoot = "..\bin"
   $solution = "..\Harbour.RedisTempData.sln"
   $testsRoot = "..\tests\Harbour.RedisTempData.Test"

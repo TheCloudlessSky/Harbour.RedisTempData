@@ -14,14 +14,14 @@ namespace Harbour.RedisTempData
     /// </summary>
     public class DefaultTempDataUserProvider : ITempDataUserProvider
     {
-        private const string defaultCookieName = "aid";
+        public const string DefaultFallbackCookieName = "aid";
         private const string cachedHttpContextKey = "__DefaultTempDataUserProvider.User";
 
         private readonly string fallbackCookieName;
         private readonly ISessionIDManager sessionIdManager;
 
         public DefaultTempDataUserProvider()
-            : this(defaultCookieName)
+            : this(DefaultFallbackCookieName)
         {
 
         }

@@ -103,6 +103,9 @@ return new RedisTempDataProvider(options, redisClient);
 Changelog
 ---------
 
+### v2.2.0
+- Expose the default fallback cookie name: `DefaultTempDataUserProvider.DefaultFallbackCookieName`
+
 ### v2.1.2
 - Fix performance issue where loading was waiting on the continuation to 
   deserialize. Instead, we want to wait only on getting the result from Redis.

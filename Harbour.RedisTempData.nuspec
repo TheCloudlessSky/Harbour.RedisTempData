@@ -2,13 +2,13 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Harbour.RedisTempData</id>
-    <version>2.1.2</version>
+    <version>2.2.0</version>
     <authors>Adrian Phinney</authors>
     <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
     <projectUrl>http://github.com/TheCloudlessSky/Harbour.RedisTempData</projectUrl>
     <description>An ASP.NET MVC ITempDataProvider for Redis.</description>
-    <!--<releaseNotes>Initial release.</releaseNotes>-->
-    <copyright>Copyright Harbour Inc. 2014</copyright>
+    <releaseNotes>https://github.com/TheCloudlessSky/Harbour.RedisTempData#changelog</releaseNotes>
+    <copyright>Copyright Harbour Inc. 2015</copyright>
     <tags>redis tempdata tempdataprovider mvc asp.net cache</tags>
     <dependencies>
       <dependency id="StackExchange.Redis" version="1.0.270" />

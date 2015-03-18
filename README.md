@@ -103,6 +103,10 @@ return new RedisTempDataProvider(options, redisClient);
 Changelog
 ---------
 
+### v2.2.1
+- Allow overriding how the `DefaultTempDataUserProvider` gets the user from the
+  `HttpContextBase`.
+
 ### v2.2.0
 - Expose the default fallback cookie name: `DefaultTempDataUserProvider.DefaultFallbackCookieName`
 

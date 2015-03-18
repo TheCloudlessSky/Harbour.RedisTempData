@@ -79,7 +79,7 @@ namespace Harbour.RedisTempData
                 }
                 else
                 {
-                    user = httpContext.User.Identity.Name;
+                    user = GetUserFromContext(httpContext);
                 }
             }
             else if (httpContext.Request.AnonymousID != null)
@@ -113,6 +113,11 @@ namespace Harbour.RedisTempData
 
             httpContext.Items[cachedHttpContextKey] = user;
             return user;
+        }
+
+        protected virtual string GetUserFromContext(HttpContextBase httpContext)
+        {
+            return httpContext.User.Identity.Name;
         }
 
         private bool IsValidCookie(HttpCookie cookie)

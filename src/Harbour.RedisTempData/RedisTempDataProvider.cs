@@ -24,8 +24,8 @@ namespace Harbour.RedisTempData
 
         public RedisTempDataProvider(RedisTempDataProviderOptions options, IDatabase redis)
         {
-            if (options == null) throw new ArgumentNullException("options");
-            if (redis == null) throw new ArgumentNullException("redis");
+            if (options == null) throw new ArgumentNullException(nameof(options));
+            if (redis == null) throw new ArgumentNullException(nameof(redis));
 
             // Copy so that references can't be modified outside of this class.
             this.options = new RedisTempDataProviderOptions(options);

@@ -13,6 +13,23 @@ namespace Harbour.RedisTempData
     /// </summary>
     public class RedisTempDataProvider : ITempDataProvider
     {
+        private static readonly LuaScript loadScript = LuaScript.Prepare(@"
+local result = redis.call('hgetall', @tempDataKey)
+redis.call('del', @tempDataKey)
+return result
+");
+        // Because we need raw access to the array of arguments, we can't
+        // use @-parameters. Also, it's important to step by 2 because
+        // the key/values are interleaved in the ARGV array (which is of
+        // size 2*N).
+        private static readonly LuaScript saveScript = LuaScript.Prepare(@"
+redis.call('del', KEYS[1])
+
+for i=1,table.getn(ARGV),2 do
+    redis.call('hset', KEYS[1], ARGV[i], ARGV[i + 1])
+end
+");
+
         private readonly RedisTempDataProviderOptions options;
         private readonly IDatabase redis;
 
@@ -40,22 +57,25 @@ namespace Harbour.RedisTempData
 
         public IDictionary<string, object> LoadTempData(ControllerContext controllerContext)
         {
-            var hashKey = GetKey(controllerContext);
+            var tempDataKey = GetKey(controllerContext);
             var result = new Dictionary<string, object>();
-
-            var transaction = redis.CreateTransaction();
-            var getAllTask = transaction.HashGetAllAsync(hashKey);
-
-            // Remove *after* reading the items since we're done with them.
-            transaction.KeyDeleteAsync(hashKey, CommandFlags.FireAndForget);
-
-            transaction.Execute();
             
-            foreach (var kvp in transaction.Wait(getAllTask))
+            var rawResult = (RedisValue[])redis.ScriptEvaluate(loadScript, new
             {
-                result[kvp.Name] = Deserialize(kvp.Value);
-            }
+                tempDataKey = (RedisKey)tempDataKey
+            });
+            
+            // HGETALL returns an array of size 2*N where each key is followed
+            // by its value. We would normally let the IDatabase do this for
+            // us with HashGetAll(), but we're evaluating a script.
+            for (int i = 0; i < rawResult.Length; i += 2)
+            {
+                var key = rawResult[i];
+                var value = rawResult[i + 1];
 
+                result[key] = Deserialize(value);
+            }
+            
             return result;
         }
 
@@ -63,21 +83,31 @@ namespace Harbour.RedisTempData
         {
             var hashKey = GetKey(controllerContext);
 
-            var transaction = redis.CreateTransaction();
-
-            // Clear the hash since we don't want old items.
-            transaction.KeyDeleteAsync(hashKey, CommandFlags.FireAndForget);
-
-            if (values != null && values.Count > 0)
+            if (values == null || values.Count == 0)
             {
+                redis.KeyDelete(hashKey, CommandFlags.FireAndForget);
+            }
+            else
+            {
+                // Because the script can't accept a map of "key -> value",
+                // we need to interleave the keys/values as an array.
+                var args = new RedisValue[values.Count * 2];
+                int i = 0;
                 foreach (var kvp in values)
                 {
+                    args[i] = kvp.Key;
                     var serialized = Serialize(kvp.Value);
-                    transaction.HashSetAsync(hashKey, kvp.Key, serialized, flags: CommandFlags.FireAndForget);
+                    args[i + 1] = serialized;
+                    // Move to next key index.
+                    i += 2;
                 }
+                
+                redis.ScriptEvaluate(saveScript.ExecutableScript,
+                    keys: new [] { (RedisKey)hashKey },
+                    values: args,
+                    flags: CommandFlags.FireAndForget
+                );
             }
-
-            transaction.Execute(CommandFlags.FireAndForget);
         }
 
         private object Deserialize(RedisValue value)

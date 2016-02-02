@@ -103,6 +103,11 @@ return new RedisTempDataProvider(options, redisClient);
 Changelog
 ---------
 
+### v3.0.0
+- Switch to using [Lua scripts](http://redis.io/commands/eval) instead of MULTI/EXEC.
+  However, the underlying data structure has not changed.
+- This means you must be running Redis 2.6.0.
+
 ### v2.2.1
 - Allow overriding how the `DefaultTempDataUserProvider` gets the user from the
   `HttpContextBase`.

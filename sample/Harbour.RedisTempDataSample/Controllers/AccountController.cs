@@ -30,6 +30,8 @@ namespace Harbour.RedisTempDataSample.Controllers
             {
                 if (Membership.ValidateUser(model.UserName, model.Password))
                 {
+                    TempData["newLogin"] = true;
+
                     FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
                     if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
                         && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
@@ -58,6 +60,8 @@ namespace Harbour.RedisTempDataSample.Controllers
         {
             FormsAuthentication.SignOut();
 
+            TempData.Remove(PageCountKey);
+            
             return RedirectToAction("Index", "Home");
         }
 

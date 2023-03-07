@@ -8,7 +8,9 @@ Installation
 ------------
 
 1. You can either install using NuGet: `PM> Install-Package Harbour.RedisTempData`
-2. Or build and install from source: `psake.cmd default`
+2. Or build and install from source: `psake.cmd`
+
+> *Psake Tip:* <br/>Run `psake.cmd -docs` to get a list of the available tasks, such as build, test, public-package, etc.
 
 Usage
 -----

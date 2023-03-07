@@ -1,2 +1,2 @@
-$config.framework = "4.5.2";
+$config.framework = "4.8";
 $config.buildFileName = "build\default.ps1";

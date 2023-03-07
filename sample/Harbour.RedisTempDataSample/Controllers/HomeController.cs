@@ -52,11 +52,19 @@ namespace Harbour.RedisTempDataSample.Controllers
         {
             ViewBag.Message = "Welcome to ASP.NET MVC!";
 
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                IncrementPageCount();
+            }
             return View();
         }
 
         public ActionResult About()
         {
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                IncrementPageCount();
+            }
             return View();
         }
     }

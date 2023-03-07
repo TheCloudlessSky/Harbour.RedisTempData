@@ -1,5 +1,15 @@
-﻿@{
+﻿@using Harbour.RedisTempDataSample.Controllers
+@{
     ViewBag.Title = "Home Page";
+
+    var pageCount = TempData.Peek(ApplicationController.PageCountKey);
 }
 
 <h2>@ViewBag.Message</h2>
+
+@if (pageCount != null)
+{
+    <p>
+        Page count: @pageCount
+    </p>
+}

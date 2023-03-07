@@ -5,18 +5,18 @@
     <version>4.0.0</version>
     <authors>Adrian Phinney</authors>
     <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
-    <projectUrl>http://github.com/TheCloudlessSky/Harbour.RedisTempData</projectUrl>
+    <projectUrl>https://github.com/TheCloudlessSky/Harbour.RedisTempData</projectUrl>
     <description>An ASP.NET MVC ITempDataProvider for Redis.</description>
     <releaseNotes>https://github.com/TheCloudlessSky/Harbour.RedisTempData#changelog</releaseNotes>
-    <copyright>Copyright Harbour Inc. 2016</copyright>
+    <copyright>Copyright Harbour Inc. 2023</copyright>
     <tags>redis tempdata tempdataprovider mvc asp.net cache</tags>
     <dependencies>
       <dependency id="StackExchange.Redis" version="2.1.30" />
     </dependencies>
   </metadata>
   <files>
-    <file src="src\Harbour.RedisTempData\bin\Release\Harbour.RedisTempData.xml" target="lib\net45" />
-    <file src="src\Harbour.RedisTempData\bin\Release\Harbour.RedisTempData.dll" target="lib\net45" />
-    <file src="src\Harbour.RedisTempData\bin\Release\Harbour.RedisTempData.pdb" target="lib\net45" />
+    <file src="src\Harbour.RedisTempData\bin\Release\Harbour.RedisTempData.xml" target="lib\net461" />
+    <file src="src\Harbour.RedisTempData\bin\Release\Harbour.RedisTempData.dll" target="lib\net461" />
+    <file src="src\Harbour.RedisTempData\bin\Release\Harbour.RedisTempData.pdb" target="lib\net461" />
   </files>
 </package>

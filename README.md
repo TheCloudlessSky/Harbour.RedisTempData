@@ -105,6 +105,11 @@ return new RedisTempDataProvider(options, redisClient);
 Changelog
 ---------
 
+### v4.0.0
+
+- Targeting only .NET >= 4.6.1. Support for previous .NET versions has been removed.
+- Support StackExchange.Redis >= 2.1.30.
+
 ### v3.0.0
 - Switch to using [Lua scripts](http://redis.io/commands/eval) instead of MULTI/EXEC.
   However, the underlying data structure has not changed.

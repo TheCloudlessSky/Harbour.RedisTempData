@@ -6,7 +6,6 @@ properties {
   $nugetApiKey = ""
   $nugetSource = ""
   $nuget = resolve-path "..\.nuget\nuget.exe"
-  $xunit = resolve-path "..\packages\xunit.runners.*\tools\xunit.console.clr4.exe"
 }
 
 task default -depends build-package
@@ -27,6 +26,8 @@ task build -depends clean {
 }
 
 task test {
+
+  $xunit = resolve-path "..\packages\xunit.runners.*\tools\xunit.console.clr4.exe"
 
   exec {
     $testBin = resolve-path "$testsRoot\bin\Release\Harbour.RedisTempData.Test.dll"

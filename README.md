@@ -12,6 +12,19 @@ Installation
 
 > *Psake Tip:* <br/>Run `psake.cmd -docs` to get a list of the available tasks, such as build, test, public-package, etc.
 
+
+Publishing Nuget Package
+------------------------
+
+In order to publish to Nuget, here are a few simple steps:
+
+1. First you need a nuget package source repository along with an API key and a package source URI for publishing.
+
+2. Now run the `psake publish-package` command from our default.ps1 script, and pass the nuget API key and package source URI from the previous step:
+    ```batch
+    .\psake.cmd publish-package -properties "@{nugetApiKey='YOUR_NUGET_API_KEY';nugetSource='NUGET_SOURCE_URI'}"
+    ```
+
 Usage
 -----
 
@@ -109,6 +122,8 @@ Changelog
 
 - Targeting only .NET >= 4.6.1. Support for previous .NET versions has been removed.
 - Support StackExchange.Redis >= 2.1.30.
+- Updated Nuget version from version 2.8.5 to 4.1.0
+- Updated psake tooling to support newer .NET versions.
 
 ### v3.0.0
 - Switch to using [Lua scripts](http://redis.io/commands/eval) instead of MULTI/EXEC.

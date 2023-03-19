@@ -3,9 +3,9 @@ properties {
   $solution = "..\Harbour.RedisTempData.sln"
   $testsRoot = "..\tests\Harbour.RedisTempData.Test"
   $nuspec = "..\Harbour.RedisTempData.nuspec"
-
+  $nugetApiKey = ""
+  $nugetSource = ""
   $nuget = resolve-path "..\.nuget\nuget.exe"
-  $xunit = resolve-path "..\packages\xunit.runners.*\tools\xunit.console.clr4.exe"
 }
 
 task default -depends build-package
@@ -26,6 +26,8 @@ task build -depends clean {
 }
 
 task test {
+
+  $xunit = resolve-path "..\packages\xunit.runners.*\tools\xunit.console.clr4.exe"
 
   exec {
     $testBin = resolve-path "$testsRoot\bin\Release\Harbour.RedisTempData.Test.dll"
@@ -48,7 +50,7 @@ task publish-package -depends build-package {
 
   exec {
     $nugetPackage = resolve-path "$binRoot\*.nupkg"
-    & $nuget push "$nugetPackage" $nugetApiKey
+    & $nuget push "$nugetPackage" -ApiKey $nugetApiKey -Source $nugetSource
   }
 
 }
